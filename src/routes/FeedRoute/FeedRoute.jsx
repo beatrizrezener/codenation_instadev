@@ -18,6 +18,20 @@ const FeedRoute = () => {
       .then(data => setUsers(data));
   }, []); // Like componentDidMount and componentWillUnmount
 
+  const [usersLoaded, setUsersLoaded] = useState(0);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    if (usersLoaded === users.length) {
+      return;
+    }
+    fetch(`https://5e7d0266a917d70016684219.mockapi.io/api/v1/users/${users[usersLoaded].id}/posts`)
+      .then(res => res.json())
+      .then(data => {
+        setPosts([...posts, ...data]);
+        setUsersLoaded(usersLoaded + 1);
+      });
+  }, [users, usersLoaded]);  // Only useEffect again when users OR usersLoaded changes. Like componentDidUpdate
+
   const [stories, setStories] = useState([]);
   useEffect(() => {
     fetch('https://5e7d0266a917d70016684219.mockapi.io/api/v1/stories')
@@ -35,6 +49,14 @@ const FeedRoute = () => {
           getUserHandler={getUserPostById}
         />
       )}
+      {users.length !== usersLoaded
+        ? (<Loading />)
+        : (
+          <Posts
+            posts={posts}
+            getUserHandler={getUserPostById}
+          />)
+      }
     </div>
   );
 };
