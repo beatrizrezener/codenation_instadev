@@ -11,6 +11,7 @@ const App = () => (
   <div data-testid="app">
     <BrowserRouter>
       <Topbar />
+      <Routes />
     </BrowserRouter>
   </div>
 );
