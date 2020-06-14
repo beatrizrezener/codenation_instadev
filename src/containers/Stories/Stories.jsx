@@ -6,7 +6,7 @@ import './Stories.scss';
 
 const Stories = ({ stories, getUserHandler }) => {
   return (
-    <React.Fragment>
+    <React.Fragment data-testid="stories">
       <section className="stories">
         <div className="container">
         </div>
