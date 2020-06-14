@@ -10,58 +10,53 @@ const Post = ({ postInfo, userInfo }) => {
 
   const { comments, imageUrl } = postInfo;
 
-  return (!userInfo) ? null :  
-  (
+  return (
     <article className="post" data-testid="post">
-      <header className="post__header">
-        <div className="user">
-          <Link to={`/users/${userInfo.username}`} className="user__thumb">
-            <img src={userInfo.avatar} alt={userInfo.name} />
-          </Link>
-          <Link to={`/users/${userInfo.username}`} className="user__name">
-            {userInfo.name}
-          </Link>
-        </div>
-
-        <button
-          className="post__context"
-          onClick={() => toggleFollow(!follow)}
-        >
-          { follow
-            ? <span className="follow-btn is-following">{"Seguindo"}</span>
-            : <span className="follow-btn">{"Seguir"}</span>
-          }
-        </button>
-      </header>
-
+      { userInfo && renderHeader(userInfo, toggleFollow, follow) }
       <figure className="post__figure">
         <img src={imageUrl} alt="" />
       </figure>
-
-      <nav className="post__controls">
-        <button
-          className="post__control"
-          onClick={() => setLike(!like)}
-        >
-          { like
-            ? <i className="fas fa-heart" />
-            : <i className="far fa-heart" />
-          }
-        </button>
-
-        { comments.length > 0 &&
-          <div className="post__status">
-            <div className="user">
-              <span>curtido por <Link to="/" >{comments[0].name}</Link> e outra{((comments.length - 1) + like) > 1 && 's'} <Link to="/">
-                {(comments.length - 1) + like} pessoa{((comments.length - 1) + like) > 1 && 's'}.
-              </Link>
-            </span>
-            </div>
-          </div>
-        }
-      </nav>
+      { userInfo && renderControl(setLike, like, comments) }
     </article>
   );
 };
+
+function renderControl(setLike, like, comments) {
+  return <nav className="post__controls">
+    <button className="post__control" onClick={() => setLike(!like)}>
+      {like
+        ? <i className="fas fa-heart" />
+        : <i className="far fa-heart" />}
+    </button>
+
+    {comments.length > 0 &&
+      <div className="post__status">
+        <div className="user">
+          <span>curtido por <Link to="/">{comments[0].name}</Link> e outra{((comments.length - 1) + like) > 1 && 's'} <Link to="/">
+            {(comments.length - 1) + like} pessoa{((comments.length - 1) + like) > 1 && 's'}.
+          </Link>
+          </span>
+        </div>
+      </div>}
+  </nav>;
+}
+
+function renderHeader(userInfo, toggleFollow, follow) {
+  return <header className="post__header">
+    <div className="user">
+      <Link to={`/users/${userInfo.username}`} className="user__thumb">
+        <img src={userInfo.avatar} alt={userInfo.name} />
+      </Link>
+      <Link to={`/users/${userInfo.username}`} className="user__name">
+        {userInfo.name}
+      </Link>
+    </div>
+    <button className="post__context" onClick={() => toggleFollow(!follow)}>
+      {follow
+        ? <span className="follow-btn is-following">{"Seguindo"}</span>
+        : <span className="follow-btn">{"Seguir"}</span>}
+    </button>
+  </header>;
+}
 
 export default Post;
