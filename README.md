@@ -1,1 +1,1 @@
-# codenation_instadev
+# Codenation Challenge: Instadev React SPA
